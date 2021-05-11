@@ -32,19 +32,7 @@
                 </Button>
                 <Button
                     Command="{Binding SaveChangedText}">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                        <Setter Property="Content" Value="Сохранить изменения"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding QuickDrawBarPinned}" Value="True">
-                                        <Setter Property="IsEnabled" Value="True" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding QuickDrawBarPinned}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False" />
-                                    </DataTrigger>
-                        </Style.Triggers>
-                            </Style>
-                    </Button.Style>
+                    Сохранить изменения
                 </Button>
         </StackPanel>
     </Grid>

@@ -12,7 +12,7 @@ namespace task_09.ViewModel
     class ContentVm : ViewModelBase
     {
         private StringBuilder _textSave = new StringBuilder();
-        private StringBuilder _text;
+        private StringBuilder _text = new StringBuilder();
 
         public string TextSave
         {
@@ -20,31 +20,18 @@ namespace task_09.ViewModel
             set
             {
                 _textSave = new StringBuilder(value);
-                OnPropertyChanged("TextSave");
-                CompareText();
+                OnPropertyChanged();
             }
         }
 
         private bool _textbox_enabled;
         public bool TextboxEnabled 
         {
-            get { return _textbox_enabled; }
+            get => _textbox_enabled;
             set
             {
                 _textbox_enabled = value;
-                OnPropertyChanged("TextboxEnabled"); 
-            }
-        }
-
-        private bool _quickDrawBarPinned;
-
-        public bool QuickDrawBarPinned
-        {
-            get => _quickDrawBarPinned;
-            set
-            {
-                _quickDrawBarPinned = value;
-                OnPropertyChanged("QuickDrawBarPinned");
+                OnPropertyChanged();
             }
         }
 
@@ -58,25 +45,12 @@ namespace task_09.ViewModel
 
         public ContentVm()
         {
-            OpenDialog = new RelayCommand(GetFile, o => true);
-            SaveChangedText = new RelayCommand(SaveChanged, o => true);
+            OpenDialog = new RelayCommand(GetFile);
+            SaveChangedText = new RelayCommand(SaveChanged, o => _text.ToString() != _textSave.ToString());
         }
 
 
-        public void CompareText()
-        {
-            if (_text.ToString() != _textSave.ToString())
-            {
-                QuickDrawBarPinned = true;
-            }
-            else
-            {
-                QuickDrawBarPinned = false;
-            }
-            
-        }
-
-        public void GetFile(object param)
+        private void GetFile(object param)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog
             {
@@ -100,16 +74,14 @@ namespace task_09.ViewModel
             }
         }
 
-        public void SaveChanged(object param)
+        private void SaveChanged(object param)
         {
             try
             {
+                _text = _textSave;
+
                 using var stream = new StreamWriter(filePath, false);
                 stream.Write(_textSave);
-            }
-            catch (UnauthorizedAccessException unauthorizedAccessException)
-            {
-                MessageBox.Show(unauthorizedAccessException.Message);
             }
             catch (Exception ex)
             {
